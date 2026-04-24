@@ -5,9 +5,9 @@ export default function Home() {
   return (
     <SafeAreaView>
     <View className="flex-1 justify-center items-center">
-      <Text className="text-2xl font-poppins">Test</Text>
-      <Text className="text-xl font-inter">Test</Text>
-      <Text className="text-sm font-medium">Test</Text>
+      <Text className="text-3xl font-poppins text-primary">Test</Text>
+      <Text className="text-2xl font-inter text-secondary">Test</Text>
+      <Text className="text-2xl font-medium text-tertiary">Test</Text>
     </View>
     </SafeAreaView>
   );

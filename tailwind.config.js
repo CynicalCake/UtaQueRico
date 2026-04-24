@@ -8,10 +8,17 @@ module.exports = {
 
   theme: {
     extend: {
+      colors: {
+        primary: "#F97316",
+        secondary: "#733E00",
+        tertiary: "#FF8C00",
+        background: "#FDE3C6",
+      },
+
       fontFamily:{
-        'poppins':['Poppins_600SemiBold','sans-serif'],
-        'inter':['Inter_400Regular', 'sans-serif'],
-        'medium':['Inter_500Medium', 'sans-serif'],
+        'poppins':['Poppins_600SemiBold'],
+        'inter':['Inter_400Regular'],
+        'medium':['Inter_500Medium'],
       },
 
 
