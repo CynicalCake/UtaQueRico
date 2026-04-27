@@ -1,8 +1,12 @@
-import { Redirect } from "expo-router";
-
+import { useRouter } from "expo-router";
+import LocationScreen from "../features/location/screens/LocationScreen";
 
 export default function Home() {
-  return (
-    <Redirect href="./tabs" />
-  );
+  const router = useRouter();
+
+  const handleSelect = (name: string) => {
+    router.push("/categories");
+  };
+
+  return <LocationScreen onSelect={handleSelect} />;
 }
