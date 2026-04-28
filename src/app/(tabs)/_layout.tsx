@@ -34,8 +34,6 @@ export default function TabsLayout() {
           ),
         }}
       />
-
-      <Tabs.Screen name="categories" options={{ href: null }} />
     </Tabs>
   );
 }

@@ -11,11 +11,9 @@ import "./global.css";
 SplashScreen.preventAutoHideAsync();
 
 const SCREEN_TITLES: Record<string, string> = {
-  "/": "Tu ubicación",
   "/home": "Inicio",
   "/routes": "Rutas",
   "/profile": "Tu perfil",
-  "/categories": "¿Qué se te antoja?",
 };
 
 const RootLayout = () => {
@@ -49,15 +47,15 @@ const RootLayout = () => {
             const canGoBack = navigation.canGoBack();
 
             return (
-              <View className="bg-primary pt-12 pb-5 px-4 flex-row items-center justify-between">
+              <View className="bg-white pt-12 pb-3 px-4 flex-row items-center justify-between">
                 <View className="w-10">
                   {canGoBack && (
                     <TouchableOpacity onPress={() => router.back()}>
-                      <ChevronLeft color="white" size={30} />
+                      <ChevronLeft color="#F97316" size={30} />
                     </TouchableOpacity>
                   )}
                 </View>
-                <Text className="text-white text-xl font-bold text-center flex-1">
+                <Text className="text-primary text-xl font-bold font-poppins text-center flex-1">
                   {currentTitle}
                 </Text>
                 <View className="w-10" />
@@ -66,7 +64,7 @@ const RootLayout = () => {
           },
         }}
       >
-        <Stack.Screen name="index" />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: true }} />
       </Stack>
     </SafeAreaProvider>
