@@ -26,7 +26,6 @@ export default function TabsLayout() {
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="user" color={color} />,
         }}
       />
-
     </Tabs>
   );
 }

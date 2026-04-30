@@ -30,7 +30,7 @@ const HomeScreen = () =>{
                     </Text>
 
                     <Pressable
-                        onPress={() => router.push("/tabs/home/dishHome" as any)}
+                        onPress={() => router.push("/tabs/home/dishHome")}
                         className="mt-5 items-center rounded-2xl bg-amber-400 px-5 py-4 active:opacity-80"
                     >
                         <Text className="text-base font-bold text-slate-950">

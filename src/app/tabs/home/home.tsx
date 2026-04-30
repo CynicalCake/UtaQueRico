@@ -1,6 +1,6 @@
 import HomeScreen from '../../../features/menu/screen/HomeScreen';
 
-export default function index() {
+export default function home() {
     return (
         <HomeScreen />
     );
