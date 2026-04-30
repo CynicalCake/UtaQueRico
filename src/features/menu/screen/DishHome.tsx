@@ -1,16 +1,11 @@
+import { useNavigation } from "@react-navigation/native";
 import { useMemo, useState } from "react";
 import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 
 import DishCard from "../components/DishCard";
 import DishSearchBar from "../components/DishSearchBar";
 
-// const categories = [
-//     { label: "Comida típica", icon: "🍛" },
-//     { label: "Comida callejera", icon: "🌮" },
-//     { label: "Comida rápida", icon: "🍔" },
-//     { label: "Parrillas", icon: "🍖" },
-//     { label: "Sopas", icon: "🍲" },
-// ];
+
 
 const dishes = [
     {
@@ -55,7 +50,9 @@ const dishes = [
     },
 ];
 
-const DishHome = ()=>{
+const DishHome = () => {
+    const navigation = useNavigation();
+
     const [search, setSearch] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("Todas");
 
@@ -79,7 +76,10 @@ const DishHome = ()=>{
             <ScrollView contentContainerClassName="gap-4 px-4 pb-8">
                 <View className="flex-row items-center justify-between pt-2">
                     <Text className="text-2xl font-bold text-orange-500">Sabor Boliviano</Text>
-                    <Pressable className="rounded-full px-2 py-1">
+                    <Pressable
+                        onPress={() => navigation.goBack()}
+                        className="rounded-full px-2 py-1"
+                    >
                         <Text className="text-2xl text-orange-400">←</Text>
                     </Pressable>
                 </View>
@@ -136,6 +136,6 @@ const DishHome = ()=>{
             </ScrollView>
         </SafeAreaView>
     );
-}
+};
 
 export default DishHome;

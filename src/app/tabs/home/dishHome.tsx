@@ -1,5 +1,8 @@
-import DishHome from '../../../features/menu/screen/DishHome';
+// app/(tabs)/home/dishHome.tsx
+// import DishHomeScreen from '../../../features/menu/screen/DishHomeScreen';
 
-export default function DishHomeRoute() {
-    return <DishHome />;
+import DishHome from "@/src/features/menu/screen/DishHome";
+
+export default function indexDishHome() {
+    return <DishHome/>;
 }
