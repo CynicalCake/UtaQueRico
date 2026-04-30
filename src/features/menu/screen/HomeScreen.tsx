@@ -1,7 +1,8 @@
 import { useRouter } from "expo-router";
 import { Pressable, SafeAreaView, Text, View } from "react-native";
+import CategoryFilter from '../../menu/components/CategoryFilter';
 
-const HomeScreen = () =>{
+const HomeScreen = () => {
     const router = useRouter();
 
     return (
@@ -13,22 +14,11 @@ const HomeScreen = () =>{
                             UtaQueRico
                         </Text>
                     </View>
-
-                    <View className="gap-3">
-                        <Text className="text-4xl font-extrabold leading-tight text-black">
-                            Este es el Home del ruteo SIUUU
-                        </Text>
-                    </View>
+                    <CategoryFilter onSelect={(id) => console.log("filtro:", id)} />
+                    
                 </View>
 
                 <View className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-black/30">
-                    <Text className="text-sm font-medium uppercase tracking-[0.2em] text-amber-200">
-                        Sugerencia de hoy
-                    </Text>
-                    <Text className="mt-3 text-2xl font-bold text-black">
-                        Arma tu primera experiencia visual
-                    </Text>
-
                     <Pressable
                         onPress={() => router.push("/tabs/home/dishHome")}
                         className="mt-5 items-center rounded-2xl bg-amber-400 px-5 py-4 active:opacity-80"
