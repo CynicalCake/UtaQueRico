@@ -20,11 +20,7 @@ export default function CategoryFilter({ onSelect }: Props) {
       horizontal
       showsHorizontalScrollIndicator={false}
       className="bg-slate-50 grow-0"
-      contentContainerStyle={{
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        gap: 16,
-      }}
+      contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 12, gap: 16 }}
     >
       {CATEGORIAS.map((cat) => {
         const isSelected = selected === cat.id;
@@ -40,19 +36,18 @@ export default function CategoryFilter({ onSelect }: Props) {
           >
             <View
               className={`w-14 h-14 rounded-full items-center justify-center ${
-                isSelected ? "bg-primary/5" : "bg-white"
+                isSelected ? "bg-primaryTint" : "bg-slate-100"
               }`}
             >
               <Icon
                 size={24}
-                color={isSelected ? "#FBBF24" : "#F97316"}
+                color={isSelected ? "#E85D04" : "#9B8B7A"}
                 strokeWidth={2}
               />
             </View>
-
             <Text
               className={`text-xs text-center leading-tight ${
-                isSelected ? "text-black font-semibold" : "text-black/80 "
+                isSelected ? "font-medium text-primary" : "font-regular text-muted"
               }`}
               numberOfLines={2}
             >
