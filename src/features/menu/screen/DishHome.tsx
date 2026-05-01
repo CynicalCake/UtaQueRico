@@ -3,10 +3,10 @@ import { useEffect, useMemo, useState } from "react";
 import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 
 import { supabase } from "@/src/core/supabase/client";
+import { Ionicons } from '@expo/vector-icons';
 import "react-native-url-polyfill/auto";
 import DishCard from "../components/DishCard";
 import DishSearchBar from "../components/DishSearchBar";
-
 
 interface Dish {
     id: string;
@@ -61,13 +61,13 @@ const DishHome = () => {
     return (
         <SafeAreaView className="flex-1 bg-white">
             <ScrollView contentContainerClassName="gap-4 px-4 pb-8">
-                <View className="flex-row items-center justify-between pt-2">
-                    <Text className="text-2xl font-bold text-orange-500">Sabor Boliviano</Text>
+                <View className="flex-row items-center justify-between pt-14">
+                    <Text className="text-2xl font-bold text-primary">Sabor Boliviano</Text>
                     <Pressable
                         onPress={() => navigation.goBack()}
-                        className="rounded-full px-2 py-1"
+                        className="rounded-full bg-orange-100 p-2"
                     >
-                        <Text className="text-2xl text-orange-400">←</Text>
+                        <Ionicons name="arrow-back" size={24} color="#FB923C" />
                     </Pressable>
                 </View>
 
@@ -89,9 +89,6 @@ const DishHome = () => {
                             key={dish.id}
                             name={dish.name}
                             restaurant={dish.description}
-                            address={dish.is_typical ? "Típico" : "No típico"}
-                            distance={dish.is_vegeterian ? "Vegetariano" : "No vegetariano"}
-                            rating={"4.5"} // Puedes ajustar esto según los datos disponibles
                             imageUri={dish.fhoto} // Cambia esto si tienes una URL de imagen
                             onPress={() => undefined}
                         />
