@@ -13,7 +13,8 @@ interface Dish {
     name: string;
     description: string;
     is_typical: boolean;
-    is_veg: boolean;
+    is_vegeterian: boolean;
+    fhoto:string;
 }
 
 const DishHome = () => {
@@ -89,9 +90,9 @@ const DishHome = () => {
                             name={dish.name}
                             restaurant={dish.description}
                             address={dish.is_typical ? "Típico" : "No típico"}
-                            distance={dish.is_veg ? "Vegetariano" : "No vegetariano"}
+                            distance={dish.is_vegeterian ? "Vegetariano" : "No vegetariano"}
                             rating={"4.5"} // Puedes ajustar esto según los datos disponibles
-                            imageUri={"https://via.placeholder.com/400"} // Cambia esto si tienes una URL de imagen
+                            imageUri={dish.fhoto} // Cambia esto si tienes una URL de imagen
                             onPress={() => undefined}
                         />
                     ))}
