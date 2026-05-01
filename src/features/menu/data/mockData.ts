@@ -2,7 +2,7 @@
 export const GASTRO_ROUTES = [
     {
         id: "1",
-        title: "Ruta de la Salteña – La Paz",
+        title: "Ruta: Un dia de sorpresas – Cochabamba",
         duration: "3 horas",
         rating: "4.9",
         reviews: "120",

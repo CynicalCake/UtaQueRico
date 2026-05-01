@@ -19,7 +19,7 @@ export default function CategoryFilter({ onSelect }: Props) {
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      className="bg-background/30 grow-0"
+      className="bg-slate-50 grow-0"
       contentContainerStyle={{
         paddingHorizontal: 16,
         paddingVertical: 12,
@@ -40,19 +40,19 @@ export default function CategoryFilter({ onSelect }: Props) {
           >
             <View
               className={`w-14 h-14 rounded-full items-center justify-center ${
-                isSelected ? "bg-primary/20" : "bg-secondary/5"
+                isSelected ? "bg-primary/5" : "bg-white"
               }`}
             >
               <Icon
                 size={24}
-                color={isSelected ? "#F97316" : "#733E00"}
-                strokeWidth={1.5}
+                color={isSelected ? "#FBBF24" : "#F97316"}
+                strokeWidth={2}
               />
             </View>
 
             <Text
               className={`text-xs text-center leading-tight ${
-                isSelected ? "text-primary font-semibold" : "text-secondary/50"
+                isSelected ? "text-black font-semibold" : "text-black/80 "
               }`}
               numberOfLines={2}
             >
