@@ -3,9 +3,9 @@ import { Image, Pressable, Text, View } from "react-native";
 type DishCardProps = {
     name: string;
     restaurant: string;
-    address: string;
-    distance: string;
-    rating: string;
+    address?: string;
+    distance?: string;
+    rating?: string;
     imageUri: string;
     onPress?: () => void;
 };
@@ -21,7 +21,7 @@ const DishCard = ({
 }: DishCardProps) => {
     return (
         <View className="flex-row overflow-hidden rounded-2xl border border-slate-200 bg-white">
-            <Image source={{ uri: imageUri }} className="h-full w-28 bg-slate-200" resizeMode="cover" />
+            <Image source={{ uri: imageUri }} className="h-full w-36 bg-slate-200" resizeMode="cover" />
 
             <View className="flex-1 gap-2 px-4 py-3">
                 <View className="flex-row items-start justify-between gap-3">

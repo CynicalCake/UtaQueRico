@@ -22,7 +22,7 @@ const DishSearchBar = ({
                 placeholderTextColor="#94A3B8"
                 className="flex-1 text-base text-slate-900"
             />
-            <Feather name="sliders" size={18} color="#F97316" />
+            {/* <Feather name="sliders" size={18} color="#F97316" /> */}
         </View>
     );
 };

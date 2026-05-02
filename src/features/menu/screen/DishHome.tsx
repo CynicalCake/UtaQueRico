@@ -1,86 +1,73 @@
 import { useNavigation } from "@react-navigation/native";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 
+import { supabase } from "@/src/core/supabase/client";
+import { Ionicons } from '@expo/vector-icons';
+import "react-native-url-polyfill/auto";
 import DishCard from "../components/DishCard";
 import DishSearchBar from "../components/DishSearchBar";
 
-
-
-const dishes = [
-    {
-        id: "1",
-        name: "Silpancho",
-        restaurant: "Doña Chorchi",
-        address: "Cochabamba",
-        distance: "1.2 km de ti",
-        rating: "4.8",
-        category: "Comida típica",
-        imageUri: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=400&q=80",
-    },
-    {
-        id: "2",
-        name: "Anticuchos",
-        restaurant: "Calle 25 de mayo y 16 de julio",
-        address: "Cochabamba",
-        distance: "1.2 km de ti",
-        rating: "4.8",
-        category: "Comida callejera",
-        imageUri: "https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=400&q=80",
-    },
-    {
-        id: "3",
-        name: "Hamburguesa clásica",
-        restaurant: "Fast Burger",
-        address: "Cochabamba",
-        distance: "2.0 km de ti",
-        rating: "4.6",
-        category: "Comida rápida",
-        imageUri: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80",
-    },
-    {
-        id: "4",
-        name: "Parrillada mixta",
-        restaurant: "La Estancia",
-        address: "Cochabamba",
-        distance: "3.1 km de ti",
-        rating: "4.9",
-        category: "Parrillas",
-        imageUri: "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=400&q=80",
-    },
-];
+interface Dish {
+    id: string;
+    name: string;
+    description: string;
+    is_typical: boolean;
+    is_vegeterian: boolean;
+    fhoto:string;
+}
 
 const DishHome = () => {
     const navigation = useNavigation();
-
     const [search, setSearch] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("Todas");
+
+    const [dishes, setDishes] = useState<Dish[]>([]); // Renombrado de 'post' a 'dishes'
+
+    useEffect(() => {
+    const fetchDishes = async () => {
+        console.log('Fetching data from Supabase...');
+        console.log('Supabase URL:', supabase.from('dish').select('*').toString()); // Agrega este log
+
+        const { data, error } = await supabase.from('dish').select('*');
+
+        if (error) {
+            console.log('Error fetching data:', error.message);
+        } else {
+            console.log('Data fetched:', data);
+            setDishes(data as Dish[]);
+        }
+    };
+
+    fetchDishes();
+    }, []);
+
+    console.log(dishes);
 
     const filteredDishes = useMemo(() => {
         const query = search.trim().toLowerCase();
 
         return dishes.filter((dish) => {
-            const matchesCategory = selectedCategory === "Todas" || dish.category === selectedCategory;
+            const matchesCategory = selectedCategory === "Todas" || dish.is_typical.toString() === selectedCategory;
             const matchesSearch =
                 query.length === 0 ||
                 dish.name.toLowerCase().includes(query) ||
-                dish.restaurant.toLowerCase().includes(query) ||
-                dish.address.toLowerCase().includes(query);
+                dish.description.toLowerCase().includes(query);
 
             return matchesCategory && matchesSearch;
         });
-    }, [search, selectedCategory]);
+    }, [search, selectedCategory, dishes]);
 
     return (
         <SafeAreaView className="flex-1 bg-white">
             <ScrollView contentContainerClassName="gap-4 px-4 pb-8">
-                <View className="flex-row items-center justify-between pt-2">
-                    <Text className="text-2xl font-bold text-orange-500">Sabor Boliviano</Text>
+                <View className="flex-row items-center justify-between pt-14">
+                    <Text className="text-2xl font-bold text-primary">Sabor Boliviano</Text>
                     <Pressable
                         onPress={() => navigation.goBack()}
-                        className="rounded-full px-2 py-1"
+                        className="rounded-full bg-orange-100 p-2"
                     >
-                        <Text className="text-2xl text-orange-400">←</Text>
+                        <Ionicons name="arrow-back" size={24} color="#FB923C" />
                     </Pressable>
                 </View>
 
@@ -93,22 +80,7 @@ const DishHome = () => {
                     >
                         <Text className="text-sm font-semibold text-slate-700">Todas</Text>
                     </Pressable>
-                    {/* {categories.map((category) => {
-                        const isActive = selectedCategory === category.label;
-
-                        return (
-                            <Pressable
-                                key={category.label}
-                                onPress={() => setSelectedCategory(category.label)}
-                                className={`items-center rounded-full px-4 py-3 ${isActive ? "bg-orange-100" : "bg-slate-100"}`}
-                            >
-                                <Text className="text-xl">{category.icon}</Text>
-                                <Text className="mt-1 text-center text-sm font-medium text-slate-700">
-                                    {category.label}
-                                </Text>
-                            </Pressable>
-                        );
-                    })} */}
+                    {/* Aquí puedes agregar más categorías si es necesario */}
                 </ScrollView>
 
                 <View className="gap-4">
@@ -116,11 +88,8 @@ const DishHome = () => {
                         <DishCard
                             key={dish.id}
                             name={dish.name}
-                            restaurant={dish.restaurant}
-                            address={dish.address}
-                            distance={dish.distance}
-                            rating={dish.rating}
-                            imageUri={dish.imageUri}
+                            restaurant={dish.description}
+                            imageUri={dish.fhoto} // Cambia esto si tienes una URL de imagen
                             onPress={() => undefined}
                         />
                     ))}
