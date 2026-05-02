@@ -1,5 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { MapPin } from "lucide-react-native";
 import {
     Image,
     Pressable,
@@ -14,25 +15,25 @@ import { GASTRO_ROUTES, TRENDING_DISHES } from "../data/mockData";
 
 // HomeScreen.tsx
 const HomeScreen = () => {
+    const { ciudad } = useLocalSearchParams<{ ciudad: string }>();
     const router = useRouter();
 
     return (
         <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
+            <View className="flex-1 bg-white">
+                {ciudad && (
+                    <View className=" bg-primary rounded-b-3xl flex-row  items-center gap-2 px-7 py-4">
+                        <MapPin size={20} color="white" />
+                        <Text className="text-black text-lg font-poppins">{ciudad}</Text>
+                    </View>
+                )}
             
             <ScrollView
                 className="flex-1"
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 32 }}
             >
-                {/* Header */}
-                <View className="px-4 pt-4 pb-2">
-                    <Text className="font-poppins text-2xl text-slate-900">
-                        UtaQueRico
-                    </Text>
-                    <Text className="font-regular text-sm text-slate-500 mt-0.5">
-                        CABECERA
-                    </Text>
-                </View>
+
 
                 {/* Banner */}
                 <LinearGradient
@@ -111,7 +112,7 @@ const HomeScreen = () => {
                         <Button
                             variant="noborder"
                             size="sm"
-                            onPress={() => router.push("/tabs/routes")}
+                            onPress={() => router.push("./tabs/routes")}
                         >
                             Ver todas
                         </Button>
@@ -120,7 +121,7 @@ const HomeScreen = () => {
                     {GASTRO_ROUTES.map((route) => (
                         <Pressable
                             key={route.id}
-                            onPress={() => router.push("/tabs/routes")}
+                            onPress={() => router.push("./tabs/routes")}
                             className="rounded-2xl overflow-hidden active:opacity-90"
                             style={{ height: 180 }}
                         >
@@ -157,6 +158,7 @@ const HomeScreen = () => {
                     ))}
                 </View>
             </ScrollView>
+            </View>
         </SafeAreaView>
     );
 };

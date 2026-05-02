@@ -65,7 +65,7 @@ const RootLayout = () => {
         }}
       >
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: true }} />
+        <Stack.Screen name="tabs" options={{ headerShown: true }} />
       </Stack>
     </SafeAreaProvider>
   );

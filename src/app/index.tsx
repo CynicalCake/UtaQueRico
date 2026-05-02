@@ -5,7 +5,7 @@ export default function Home() {
   const router = useRouter();
 
   const handleSelect = (name: string) => {
-    router.push(`/(tabs)/home?ciudad=${encodeURIComponent(name)}`);
+    router.push(`./tabs/home?ciudad=${encodeURIComponent(name)}`);
   };
 
   return <LocationScreen onSelect={handleSelect} />;
