@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { CATEGORIAS } from "../../../shared/components/data";
+import { CATEGORIAS } from "../../../shared/constants/data";
 
 type Props = {
   onSelect?: (id: string | null) => void;
