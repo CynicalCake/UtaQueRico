@@ -1,11 +1,12 @@
-import { Text, View } from "react-native";
+import { Component } from 'react'
+import { Text, View } from 'react-native'
 
-const RoutesScreen = () => {
+export default class index extends Component {
+  render() {
     return (
-        <View>
-            <Text>Routes Screen</Text>
-        </View>
-    );
+      <View>
+        <Text> textInComponent </Text>
+      </View>
+    )
+  }
 }
-
-export default RoutesScreen;

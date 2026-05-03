@@ -9,20 +9,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#F97316",
-        secondary: "#733E00",
-        tertiary: "#FF8C00",
-        background: "#FDE3C6",
+        primary: "#E85D04",   // naranja fuerte 
+        primaryLigth: "#FB923C",   // naranja vivo — hover / secundario
+        primaryTint: "#FEE8D6",   // fondos
+        surface: "#FAFAF9",   // background general (blanco cálido)
+        textDark: "#1C0A00",   // texto principal
+        muted: "#9B8B7A",   // labels inactivos
       },
 
-      fontFamily:{
-        'poppins':['Poppins_600SemiBold'],
-        'inter':['Inter_400Regular'],
-        'medium':['Inter_500Medium'],
+      fontFamily: {
+        'poppins': ['Poppins_600SemiBold'],
+        'regular': ['Inter_400Regular'],
+        'medium': ['Inter_500Medium'],
       },
-
-
-
     },
   },
   plugins: [],

@@ -1,6 +1,10 @@
+import { useLocalSearchParams } from "expo-router";
+
+
 import HomeScreen from '../../../features/menu/screen/HomeScreen';
 
 export default function home() {
+    const { ciudad } = useLocalSearchParams<{ ciudad: string }>();
     return (
         <HomeScreen />
     );

@@ -1,11 +1,12 @@
-import { Text, View } from "react-native";
-const profile = () =>{
-    return(
-        <View>
-            <Text>Profile Screen</Text>
-        </View>
-    );
+import { Component } from 'react'
+import { Text, View } from 'react-native'
 
+export default class index extends Component {
+  render() {
+    return (
+      <View>
+        <Text> textInComponent </Text>
+      </View>
+    )
+  }
 }
-
-export default profile;
