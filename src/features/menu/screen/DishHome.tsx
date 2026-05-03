@@ -14,7 +14,7 @@ interface Dish {
     description: string;
     is_typical: boolean;
     is_vegeterian: boolean;
-    fhoto:string;
+    photo:string;
 }
 
 const DishHome = () => {
@@ -89,7 +89,7 @@ const DishHome = () => {
                             key={dish.id}
                             name={dish.name}
                             restaurant={dish.description}
-                            imageUri={dish.fhoto} // Cambia esto si tienes una URL de imagen
+                            imageUri={dish.photo} // Cambia esto si tienes una URL de imagen
                             onPress={() => undefined}
                         />
                     ))}
