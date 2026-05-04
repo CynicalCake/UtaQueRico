@@ -6,6 +6,7 @@ import { ChevronLeft } from "lucide-react-native";
 import { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { DepartmentProvider } from "../core/context/DepartmentContext";
 import "./global.css";
 
 SplashScreen.preventAutoHideAsync();
@@ -39,11 +40,12 @@ const RootLayout = () => {
     "";
 
   return (
-    <SafeAreaProvider>
-      <Stack
-        screenOptions={{
-          animation: "slide_from_right",
-          header: ({ navigation }) => {
+    <DepartmentProvider>
+      <SafeAreaProvider>
+        <Stack
+          screenOptions={{
+            animation: "slide_from_right",
+            header: ({ navigation }) => {
             const canGoBack = navigation.canGoBack();
 
             return (
@@ -68,6 +70,7 @@ const RootLayout = () => {
         <Stack.Screen name="tabs" options={{ headerShown: true }} />
       </Stack>
     </SafeAreaProvider>
+    </DepartmentProvider>
   );
 };
 
