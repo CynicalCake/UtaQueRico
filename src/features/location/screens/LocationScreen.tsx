@@ -8,7 +8,7 @@ import { Department } from "../types/Department";
 export default function LocationScreen({
   onSelect,
 }: {
-  onSelect: (name: string) => void;
+  onSelect: (department: Department) => void;
 }) {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
@@ -40,7 +40,8 @@ export default function LocationScreen({
 
   const handleSelect = (item: Department) => {
     setSelected(item.id);
-    onSelect(item.name);
+    onSelect(item);
+    console.log("Departamento seleccionado:", item);
   };
 
   return (
@@ -69,9 +70,6 @@ export default function LocationScreen({
                   style={{ width: 130, height: 100 }}
                 />
               
-              {/* <Text className="text-3xl font-bold text-slate-900 text-center">
-                Sabor Boliviano
-              </Text> */}
               <Text className="text-muted font-poppins text-sm mt-4 self-center text-center">
                 Descubre los tesoros gastronómicos de Bolivia
               </Text>
@@ -93,6 +91,8 @@ export default function LocationScreen({
               item={item}
               selected={selected === item.id}
               onPress={() => handleSelect(item)}
+              
+              
             />
           )}
         />
