@@ -2,9 +2,11 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useMemo, useState } from "react";
 import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 
+import { useDepartment } from "@/src/core/context/DepartmentContext";
 import { supabase } from "@/src/core/supabase/client";
 import { Ionicons } from '@expo/vector-icons';
 import "react-native-url-polyfill/auto";
+import CategoryFilter from "../components/CategoryFilter";
 import DishCard from "../components/DishCard";
 import DishSearchBar from "../components/DishSearchBar";
 
@@ -14,32 +16,33 @@ interface Dish {
     description: string;
     is_typical: boolean;
     is_vegeterian: boolean;
-    fhoto:string;
+    fhoto: string;
 }
 
 const DishHome = () => {
     const navigation = useNavigation();
     const [search, setSearch] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("Todas");
+     const { department } = useDepartment();
 
     const [dishes, setDishes] = useState<Dish[]>([]); // Renombrado de 'post' a 'dishes'
 
     useEffect(() => {
-    const fetchDishes = async () => {
-        console.log('Fetching data from Supabase...');
-        console.log('Supabase URL:', supabase.from('dish').select('*').toString()); // Agrega este log
+        const fetchDishes = async () => {
+            console.log('Fetching data from Supabase...');
+            console.log('Supabase URL:', supabase.from('dish').select('*').toString()); // Agrega este log
 
-        const { data, error } = await supabase.from('dish').select('*');
+            const { data, error } = await supabase.from('dish').select('*');
 
-        if (error) {
-            console.log('Error fetching data:', error.message);
-        } else {
-            console.log('Data fetched:', data);
-            setDishes(data as Dish[]);
-        }
-    };
+            if (error) {
+                console.log('Error fetching data:', error.message);
+            } else {
+                console.log('Data fetched:', data);
+                setDishes(data as Dish[]);
+            }
+        };
 
-    fetchDishes();
+        fetchDishes();
     }, []);
 
     console.log(dishes);
@@ -61,7 +64,7 @@ const DishHome = () => {
     return (
         <SafeAreaView className="flex-1 bg-white">
             <ScrollView contentContainerClassName="gap-4 px-4 pb-8">
-                <View className="flex-row items-center justify-between pt-14">
+                <View className="flex-row items-center justify-between pt-1">
                     <Text className="text-2xl font-bold text-primary">Sabor Boliviano</Text>
                     <Pressable
                         onPress={() => navigation.goBack()}
@@ -72,6 +75,11 @@ const DishHome = () => {
                 </View>
 
                 <DishSearchBar value={search} onChangeText={setSearch} />
+                <View className="mt-3">
+                    <CategoryFilter
+                         onSelect={(department?.id) ? (id) => console.log("Categoría seleccionada:", id) : undefined}
+                    />
+                </View>
 
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-3 py-1">
                     <Pressable

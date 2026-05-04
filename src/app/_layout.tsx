@@ -49,7 +49,7 @@ const RootLayout = () => {
             const canGoBack = navigation.canGoBack();
 
             return (
-              <View className="bg-white p-3 px-4 flex-row items-center justify-between">
+              <View className="bg-white pt-12 pb-3 px-4 flex-row items-center justify-between">
                 <View className="w-10">
                   {canGoBack && (
                     <TouchableOpacity onPress={() => router.back()}>

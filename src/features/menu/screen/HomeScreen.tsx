@@ -35,13 +35,12 @@ const HomeScreen = () => {
                 </LinearGradient>
             )}
 
-            
                 <View className="mt-3">
                     <Text className="font-poppins px-4 py-2 text-base text-slate-900">
                         ¿Qué se te antoja hoy?
                     </Text>
                     <CategoryFilter
-                        onSelect={(id) => console.log("filtro:", id)}
+                        onSelect={(department?.id) ? (id) => console.log("Categoría seleccionada:", id) : undefined}
                     />
                 </View>
 
@@ -146,8 +145,6 @@ const HomeScreen = () => {
                 </View>
                  </View>
             </ScrollView>
-       
-
     );
 };
 
