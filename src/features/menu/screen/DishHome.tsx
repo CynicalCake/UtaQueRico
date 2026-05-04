@@ -2,45 +2,34 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useMemo, useState } from "react";
 import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 
-import { supabase } from "@/src/core/supabase/client";
 import { Ionicons } from '@expo/vector-icons';
 import "react-native-url-polyfill/auto";
+import { getDishes } from "../api/dishApi";
 import DishCard from "../components/DishCard";
 import DishSearchBar from "../components/DishSearchBar";
+import { DishItem } from "../types/Dish";
 
-interface Dish {
-    id: string;
-    name: string;
-    description: string;
-    is_typical: boolean;
-    is_vegeterian: boolean;
-    photo:string;
-}
 
 const DishHome = () => {
     const navigation = useNavigation();
     const [search, setSearch] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("Todas");
+    const [dishes, setDishes] = useState<DishItem[]>([]);
 
-    const [dishes, setDishes] = useState<Dish[]>([]); // Renombrado de 'post' a 'dishes'
-
-    useEffect(() => {
-    const fetchDishes = async () => {
-        console.log('Fetching data from Supabase...');
-        console.log('Supabase URL:', supabase.from('dish').select('*').toString()); // Agrega este log
-
-        const { data, error } = await supabase.from('dish').select('*');
-
-        if (error) {
-            console.log('Error fetching data:', error.message);
-        } else {
-            console.log('Data fetched:', data);
-            setDishes(data as Dish[]);
-        }
+ useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getDishes('Cochabamba', 'Típico de aquí');
+        console.log("Respuesta de la API:", data); // Verificar los datos devueltos por la API
+        setDishes(data);
+        console.log("Datos establecidos en el estado:", data);
+      } catch (err) {
+        console.error("Error al consumir la API:", err); // Verificar si hay errores
+      }
     };
 
-    fetchDishes();
-    }, []);
+    fetchData();
+  }, []); // Dependencias del useEffect
 
     console.log(dishes);
 
@@ -48,15 +37,14 @@ const DishHome = () => {
         const query = search.trim().toLowerCase();
 
         return dishes.filter((dish) => {
-            const matchesCategory = selectedCategory === "Todas" || dish.is_typical.toString() === selectedCategory;
-            const matchesSearch =
+            return (
                 query.length === 0 ||
-                dish.name.toLowerCase().includes(query) ||
-                dish.description.toLowerCase().includes(query);
-
-            return matchesCategory && matchesSearch;
+                dish.dish_name.toLowerCase().includes(query) ||
+                (dish.dish_description ?? "").toLowerCase().includes(query)
+        );
         });
-    }, [search, selectedCategory, dishes]);
+    }, [search, dishes]);
+
 
     return (
         <SafeAreaView className="flex-1 bg-white">
@@ -73,23 +61,16 @@ const DishHome = () => {
 
                 <DishSearchBar value={search} onChangeText={setSearch} />
 
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-3 py-1">
-                    <Pressable
-                        onPress={() => setSelectedCategory("Todas")}
-                        className={`items-center rounded-full px-4 py-3 ${selectedCategory === "Todas" ? "bg-orange-100" : "bg-slate-100"}`}
-                    >
-                        <Text className="text-sm font-semibold text-slate-700">Todas</Text>
-                    </Pressable>
-                    {/* Aquí puedes agregar más categorías si es necesario */}
-                </ScrollView>
+                
 
                 <View className="gap-4">
                     {filteredDishes.map((dish) => (
                         <DishCard
-                            key={dish.id}
-                            name={dish.name}
-                            restaurant={dish.description}
-                            imageUri={dish.photo} // Cambia esto si tienes una URL de imagen
+                            key={dish.dish_id}
+                            name={dish.dish_name}
+                            restaurantName={dish.restaurant_name}
+                            department={dish.department_name}
+                            imageUri={dish.dish_photo} // Cambia esto si tienes una URL de imagen
                             onPress={() => undefined}
                         />
                     ))}
