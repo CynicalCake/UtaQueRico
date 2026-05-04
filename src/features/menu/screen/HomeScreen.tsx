@@ -1,8 +1,10 @@
+import { useCategory } from "@/src/core/context/CategoryContext";
 import { useDepartment } from "@/src/core/context/DepartmentContext";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { MapPin } from "lucide-react-native";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../../../shared/ui/Button";
 import CategoryFilter from "../../menu/components/CategoryFilter";
 import { GASTRO_ROUTES, TRENDING_DISHES } from "../data/mockData";
@@ -10,37 +12,43 @@ import { GASTRO_ROUTES, TRENDING_DISHES } from "../data/mockData";
 const HomeScreen = () => {
     const router = useRouter();
     const { department } = useDepartment();
+    const { setSelectedCategory } = useCategory();
 
     return (
-<ScrollView
-                className="flex-1"
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 32 }}
-            >
-        <View className="flex-1 bg-white">
-            {department && (
-                <LinearGradient
-                    colors={["#E85D04", "#FB923C"]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    className="rounded-xl p-6"
-                >
-                    <View className="flex-row items-center gap-2 mb-2">
-                        <MapPin size={20} color="white" />
-                        <Text className="text-white text-lg font-poppins">{department.name}</Text>
-                    </View>
-                    <Text className="font-regular text-sm text-white/90">
-                        Descubre lo mejor de la gastronomía de {department.name} con nosotros
-                    </Text>
-                </LinearGradient>
-            )}
+        <SafeAreaView className="flex-1 bg-white" edges={["top"]}>  
+        <ScrollView
+            className="flex-1"
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 32 }}
+        >
+            <View className="flex-1 bg-white">
+                {department && (
+                    <LinearGradient
+                        colors={["#E85D04", "#FB923C"]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                        className="rounded-xl p-6"
+                    >
+                        <View className="flex-row items-center gap-2 mb-2">
+                            <MapPin size={20} color="white" />
+                            <Text className="text-white text-lg font-poppins">{department.name}</Text>
+                        </View>
+                        <Text className="font-regular text-sm text-white/90">
+                            Descubre lo mejor de la gastronomía de {department.name} con nosotros
+                        </Text>
+                    </LinearGradient>
+                )}
 
                 <View className="mt-3">
                     <Text className="font-poppins px-4 py-2 text-base text-slate-900">
                         ¿Qué se te antoja hoy?
                     </Text>
                     <CategoryFilter
-                        onSelect={(department?.id) ? (id) => console.log("Categoría seleccionada:", id) : undefined}
+                        onSelect={(cat) => {
+                            if (!cat) return
+                            setSelectedCategory(cat);
+                            router.push("/tabs/home/dishHome");
+                        }}
                     />
                 </View>
 
@@ -73,7 +81,7 @@ const HomeScreen = () => {
                                         variant="secondary"
                                         size="sm"
                                         fullWidth
-                                        onPress={() => router.push("/tabs/home/dishHome")}
+                                    //onPress={() => router.push("/tabs/home/dishHome")}
                                     >
                                         Ver Ruta
                                     </Button>
@@ -143,8 +151,9 @@ const HomeScreen = () => {
                         </Pressable>
                     ))}
                 </View>
-                 </View>
-            </ScrollView>
+            </View>
+        </ScrollView>
+        </SafeAreaView>
     );
 };
 

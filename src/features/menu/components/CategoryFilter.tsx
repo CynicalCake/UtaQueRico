@@ -1,3 +1,4 @@
+import { useCategory } from "@/src/core/context/CategoryContext";
 import { useDepartment } from "@/src/core/context/DepartmentContext";
 import { useEffect, useState } from "react";
 import {
@@ -12,19 +13,25 @@ import { getCategoriesByDepartment } from "../api/categories";
 import { Category } from "../types/Category";
 
 type Props = {
-  onSelect?: (id: string | null) => void;
+  onSelect?: (category: Category | null) => void;
 };
 
-export default function CategoryFilter({  onSelect }: Props) {
+export default function CategoryFilter({ onSelect }: Props) {
   const { department } = useDepartment();
+  const { selectedCategory } = useCategory();
   const [selected, setSelected] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    setSelected(selectedCategory?.id ?? null);
+  }, [selectedCategory]);
+
   const handlePress = (id: string) => {
     const next = selected === id ? null : id;
     setSelected(next);
-    onSelect?.(next);
+    const cat = categories.find((c) => c.id === id) ?? null;
+    onSelect?.(next ? cat : null);
   };
 
   useEffect(() => {
@@ -41,7 +48,6 @@ export default function CategoryFilter({  onSelect }: Props) {
         const items = await getCategoriesByDepartment(department?.id);
         if (isMounted) {
           setCategories(items);
-          setSelected(null);
         }
       } catch (error) {
         console.error("No se pudieron cargar las categorías", error);

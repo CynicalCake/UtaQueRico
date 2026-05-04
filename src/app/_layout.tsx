@@ -6,6 +6,7 @@ import { ChevronLeft } from "lucide-react-native";
 import { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { CategoryProvider } from "../core/context/CategoryContext";
 import { DepartmentProvider } from "../core/context/DepartmentContext";
 import "./global.css";
 
@@ -41,35 +42,37 @@ const RootLayout = () => {
 
   return (
     <DepartmentProvider>
-      <SafeAreaProvider>
-        <Stack
-          screenOptions={{
-            animation: "slide_from_right",
-            header: ({ navigation }) => {
-            const canGoBack = navigation.canGoBack();
+      <CategoryProvider>
+        <SafeAreaProvider>
+          <Stack
+            screenOptions={{
+              animation: "slide_from_right",
+              header: ({ navigation }) => {
+                const canGoBack = navigation.canGoBack();
 
-            return (
-              <View className="bg-white pt-12 pb-3 px-4 flex-row items-center justify-between">
-                <View className="w-10">
-                  {canGoBack && (
-                    <TouchableOpacity onPress={() => router.back()}>
-                      <ChevronLeft color="#F97316" size={30} />
-                    </TouchableOpacity>
-                  )}
-                </View>
-                <Text className="text-primary text-xl font-bold font-poppins text-center flex-1">
-                  {currentTitle}
-                </Text>
-                <View className="w-10" />
-              </View>
-            );
-          },
-        }}
-      >
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="tabs" options={{ headerShown: true }} />
-      </Stack>
-    </SafeAreaProvider>
+                return (
+                  <View className="bg-white pt-12 pb-3 px-4 flex-row items-center justify-between">
+                    <View className="w-10">
+                      {canGoBack && (
+                        <TouchableOpacity onPress={() => router.back()}>
+                          <ChevronLeft color="#F97316" size={30} />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    <Text className="text-primary text-xl font-bold font-poppins text-center flex-1">
+                      {currentTitle}
+                    </Text>
+                    <View className="w-10" />
+                  </View>
+                );
+              },
+            }}
+          >
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="tabs" options={{ headerShown: true }} />
+          </Stack>
+        </SafeAreaProvider>
+      </CategoryProvider>
     </DepartmentProvider>
   );
 };

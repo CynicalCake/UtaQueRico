@@ -1,10 +1,11 @@
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useMemo, useState } from "react";
-import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
-
+import { useCategory } from "@/src/core/context/CategoryContext";
 import { useDepartment } from "@/src/core/context/DepartmentContext";
 import { supabase } from "@/src/core/supabase/client";
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+import { useEffect, useMemo, useState } from "react";
+import { Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import "react-native-url-polyfill/auto";
 import CategoryFilter from "../components/CategoryFilter";
 import DishCard from "../components/DishCard";
@@ -22,9 +23,8 @@ interface Dish {
 const DishHome = () => {
     const navigation = useNavigation();
     const [search, setSearch] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("Todas");
-     const { department } = useDepartment();
-
+    const { selectedCategory, setSelectedCategory } = useCategory();
+    const { department } = useDepartment();
     const [dishes, setDishes] = useState<Dish[]>([]); // Renombrado de 'post' a 'dishes'
 
     useEffect(() => {
@@ -49,23 +49,19 @@ const DishHome = () => {
 
     const filteredDishes = useMemo(() => {
         const query = search.trim().toLowerCase();
-
-        return dishes.filter((dish) => {
-            const matchesCategory = selectedCategory === "Todas" || dish.is_typical.toString() === selectedCategory;
-            const matchesSearch =
-                query.length === 0 ||
+        if (!query) return dishes;
+        return dishes.filter(
+            (dish) =>
                 dish.name.toLowerCase().includes(query) ||
-                dish.description.toLowerCase().includes(query);
-
-            return matchesCategory && matchesSearch;
-        });
-    }, [search, selectedCategory, dishes]);
+                dish.description.toLowerCase().includes(query)
+        );
+    }, [search, dishes]);
 
     return (
-        <SafeAreaView className="flex-1 bg-white">
+        <SafeAreaView className="flex-1 bg-white" edges={["top"]}>  
             <ScrollView contentContainerClassName="gap-4 px-4 pb-8">
                 <View className="flex-row items-center justify-between pt-1">
-                    <Text className="text-2xl font-bold text-primary">Sabor Boliviano</Text>
+                    <Text className="text-2xl font-bold text-primary">Sabores de  {department?.name ?? "Bolivia"}</Text>
                     <Pressable
                         onPress={() => navigation.goBack()}
                         className="rounded-full bg-orange-100 p-2"
@@ -77,19 +73,9 @@ const DishHome = () => {
                 <DishSearchBar value={search} onChangeText={setSearch} />
                 <View className="mt-3">
                     <CategoryFilter
-                         onSelect={(department?.id) ? (id) => console.log("Categoría seleccionada:", id) : undefined}
+                        onSelect={(cat) => setSelectedCategory(cat)} 
                     />
                 </View>
-
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-3 py-1">
-                    <Pressable
-                        onPress={() => setSelectedCategory("Todas")}
-                        className={`items-center rounded-full px-4 py-3 ${selectedCategory === "Todas" ? "bg-orange-100" : "bg-slate-100"}`}
-                    >
-                        <Text className="text-sm font-semibold text-slate-700">Todas</Text>
-                    </Pressable>
-                    {/* Aquí puedes agregar más categorías si es necesario */}
-                </ScrollView>
 
                 <View className="gap-4">
                     {filteredDishes.map((dish) => (
