@@ -8,54 +8,48 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import "react-native-url-polyfill/auto";
 import CategoryFilter from "../components/CategoryFilter";
+import { getDishes } from "../api/dishApi";
 import DishCard from "../components/DishCard";
 import DishSearchBar from "../components/DishSearchBar";
+import { DishItem } from "../types/Dish";
 
-interface Dish {
-    id: string;
-    name: string;
-    description: string;
-    is_typical: boolean;
-    is_vegeterian: boolean;
-    fhoto: string;
-}
 
 const DishHome = () => {
     const navigation = useNavigation();
     const [search, setSearch] = useState("");
     const { selectedCategory, setSelectedCategory } = useCategory();
     const { department } = useDepartment();
-    const [dishes, setDishes] = useState<Dish[]>([]); // Renombrado de 'post' a 'dishes'
+    const [dishes, setDishes] = useState<DishItem[]>([]); // Renombrado de 'post' a 'dishes'
 
-    useEffect(() => {
-        const fetchDishes = async () => {
-            console.log('Fetching data from Supabase...');
-            console.log('Supabase URL:', supabase.from('dish').select('*').toString()); // Agrega este log
+ useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getDishes('Cochabamba', 'Típico de aquí');
+        console.log("Respuesta de la API:", data); // Verificar los datos devueltos por la API
+        setDishes(data);
+        console.log("Datos establecidos en el estado:", data);
+      } catch (err) {
+        console.error("Error al consumir la API:", err); // Verificar si hay errores
+      }
+    };
 
-            const { data, error } = await supabase.from('dish').select('*');
-
-            if (error) {
-                console.log('Error fetching data:', error.message);
-            } else {
-                console.log('Data fetched:', data);
-                setDishes(data as Dish[]);
-            }
-        };
-
-        fetchDishes();
-    }, []);
+    fetchData();
+  }, []); // Dependencias del useEffect
 
     console.log(dishes);
 
     const filteredDishes = useMemo(() => {
         const query = search.trim().toLowerCase();
-        if (!query) return dishes;
-        return dishes.filter(
-            (dish) =>
-                dish.name.toLowerCase().includes(query) ||
-                dish.description.toLowerCase().includes(query)
+
+        return dishes.filter((dish) => {
+            return (
+                query.length === 0 ||
+                dish.dish_name.toLowerCase().includes(query) ||
+                (dish.dish_description ?? "").toLowerCase().includes(query)
         );
+        });
     }, [search, dishes]);
+
 
     return (
         <SafeAreaView className="flex-1 bg-white" edges={["top"]}>  
@@ -80,10 +74,11 @@ const DishHome = () => {
                 <View className="gap-4">
                     {filteredDishes.map((dish) => (
                         <DishCard
-                            key={dish.id}
-                            name={dish.name}
-                            restaurant={dish.description}
-                            imageUri={dish.fhoto} // Cambia esto si tienes una URL de imagen
+                            key={dish.dish_id}
+                            name={dish.dish_name}
+                            restaurantName={dish.restaurant_name}
+                            department={dish.department_name}
+                            imageUri={dish.dish_photo} // Cambia esto si tienes una URL de imagen
                             onPress={() => undefined}
                         />
                     ))}
