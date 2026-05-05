@@ -1,14 +1,13 @@
 import { useCategory } from "@/src/core/context/CategoryContext";
 import { useDepartment } from "@/src/core/context/DepartmentContext";
-import { supabase } from "@/src/core/supabase/client";
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useMemo, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import "react-native-url-polyfill/auto";
-import CategoryFilter from "../components/CategoryFilter";
 import { getDishes } from "../api/dishApi";
+import CategoryFilter from "../components/CategoryFilter";
 import DishCard from "../components/DishCard";
 import DishSearchBar from "../components/DishSearchBar";
 import { DishItem } from "../types/Dish";
@@ -24,7 +23,7 @@ const DishHome = () => {
  useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getDishes('Cochabamba', 'Típico de aquí');
+        const data = await getDishes(department?.name ?? "Bolivia", selectedCategory?.name ?? "All");
         console.log("Respuesta de la API:", data); // Verificar los datos devueltos por la API
         setDishes(data);
         console.log("Datos establecidos en el estado:", data);
@@ -34,7 +33,7 @@ const DishHome = () => {
     };
 
     fetchData();
-  }, []); // Dependencias del useEffect
+    }, [department?.name, selectedCategory?.name]); // Dependencias del useEffect
 
     console.log(dishes);
 
