@@ -5,7 +5,7 @@ import { router, SplashScreen, Stack, usePathname } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
 import { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { CategoryProvider } from "../core/context/CategoryContext";
 import { DepartmentProvider } from "../core/context/DepartmentContext";
 import "./global.css";
@@ -13,9 +13,10 @@ import "./global.css";
 SplashScreen.preventAutoHideAsync();
 
 const SCREEN_TITLES: Record<string, string> = {
-  "/home": "Inicio",
-  "/routes": "Rutas",
-  "/profile": "Tu perfil",
+  "/tabs/home": "Inicio",
+  "/tabs/routes": "Rutas",
+  "/tabs/profile": "Tu perfil",
+  "/tabs/home/dishHome": "¿Qué se te antoja hoy?",
 };
 
 const RootLayout = () => {
@@ -43,7 +44,7 @@ const RootLayout = () => {
   return (
     <DepartmentProvider>
       <CategoryProvider>
-        <SafeAreaProvider>
+        <SafeAreaView className="flex-1 bg-white" edges={["top", "left"]}>
           <Stack
             screenOptions={{
               animation: "slide_from_right",
@@ -51,7 +52,7 @@ const RootLayout = () => {
                 const canGoBack = navigation.canGoBack();
 
                 return (
-                  <View className="bg-white pt-12 pb-3 px-4 flex-row items-center justify-between">
+                  <View className="bg-white pt-2 pb-2 px-4 flex-row items-center justify-between">
                     <View className="w-10">
                       {canGoBack && (
                         <TouchableOpacity onPress={() => router.back()}>
@@ -71,7 +72,7 @@ const RootLayout = () => {
             <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen name="tabs" options={{ headerShown: true }} />
           </Stack>
-        </SafeAreaProvider>
+        </SafeAreaView>
       </CategoryProvider>
     </DepartmentProvider>
   );
