@@ -1,13 +1,13 @@
-import { Departamento } from "@/src/shared/constants/data";
 import { CheckCircle } from "lucide-react-native";
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { Department } from "../types/Department";
 
 export function DeptoCard({
   item,
   selected,
   onPress,
 }: {
-  item: Departamento;
+  item: Department;
   selected: boolean;
   onPress: () => void;
 }) {
@@ -18,8 +18,8 @@ export function DeptoCard({
       className="w-[48%] mb-3"
     >
       <ImageBackground
-        source={item.image}
-        className="h-40 rounded-2xl overflow-hidden justify-end"
+        source={{ uri: item.photo }}
+        className="h-44 rounded-2xl overflow-hidden justify-end"
         imageStyle={{ borderRadius: 16 }}
       >
         <View className="absolute inset-0 bg-black/40 rounded-2xl" />
@@ -35,10 +35,16 @@ export function DeptoCard({
         )}
 
         <View className="p-3">
-          <Text className="text-white text-base font-bold leading-tight">
+          <Text className="  text-white text-xm font-bold leading-tight">
             {item.name}
           </Text>
-          <Text className="text-white/80 text-xs mt-0.5">{item.subtitle}</Text>
+          <View className="self-start rounded-full bg-primary px-1.5 py-0.5 mb-2">
+            <Text className="text-[10px] font-semibold text-white">
+              {item.description}
+            </Text>
+          </View>
+
+          
         </View>
       </ImageBackground>
     </TouchableOpacity>

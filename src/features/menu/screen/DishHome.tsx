@@ -1,46 +1,39 @@
+import { useCategory } from "@/src/core/context/CategoryContext";
+import { useDepartment } from "@/src/core/context/DepartmentContext";
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useMemo, useState } from "react";
-import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
-
-import { supabase } from "@/src/core/supabase/client";
-import { Ionicons } from '@expo/vector-icons';
+import { Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import "react-native-url-polyfill/auto";
+import { getDishes } from "../api/dishApi";
+import CategoryFilter from "../components/CategoryFilter";
 import DishCard from "../components/DishCard";
 import DishSearchBar from "../components/DishSearchBar";
+import { DishItem } from "../types/Dish";
 
-interface Dish {
-    id: string;
-    name: string;
-    description: string;
-    is_typical: boolean;
-    is_vegeterian: boolean;
-    fhoto:string;
-}
 
 const DishHome = () => {
     const navigation = useNavigation();
     const [search, setSearch] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("Todas");
+    const { selectedCategory, setSelectedCategory } = useCategory();
+    const { department } = useDepartment();
+    const [dishes, setDishes] = useState<DishItem[]>([]); // Renombrado de 'post' a 'dishes'
 
-    const [dishes, setDishes] = useState<Dish[]>([]); // Renombrado de 'post' a 'dishes'
-
-    useEffect(() => {
-    const fetchDishes = async () => {
-        console.log('Fetching data from Supabase...');
-        console.log('Supabase URL:', supabase.from('dish').select('*').toString()); // Agrega este log
-
-        const { data, error } = await supabase.from('dish').select('*');
-
-        if (error) {
-            console.log('Error fetching data:', error.message);
-        } else {
-            console.log('Data fetched:', data);
-            setDishes(data as Dish[]);
-        }
+ useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getDishes(department?.name ?? "Bolivia", selectedCategory?.name ?? "All");
+        console.log("Respuesta de la API:", data); // Verificar los datos devueltos por la API
+        setDishes(data);
+        console.log("Datos establecidos en el estado:", data);
+      } catch (err) {
+        console.error("Error al consumir la API:", err); // Verificar si hay errores
+      }
     };
 
-    fetchDishes();
-    }, []);
+    fetchData();
+    }, [department?.name, selectedCategory?.name]); // Dependencias del useEffect
 
     console.log(dishes);
 
@@ -48,21 +41,20 @@ const DishHome = () => {
         const query = search.trim().toLowerCase();
 
         return dishes.filter((dish) => {
-            const matchesCategory = selectedCategory === "Todas" || dish.is_typical.toString() === selectedCategory;
-            const matchesSearch =
+            return (
                 query.length === 0 ||
-                dish.name.toLowerCase().includes(query) ||
-                dish.description.toLowerCase().includes(query);
-
-            return matchesCategory && matchesSearch;
+                dish.dish_name.toLowerCase().includes(query) ||
+                (dish.dish_description ?? "").toLowerCase().includes(query)
+        );
         });
-    }, [search, selectedCategory, dishes]);
+    }, [search, dishes]);
+
 
     return (
-        <SafeAreaView className="flex-1 bg-white">
+        <SafeAreaView className="flex-1 bg-white" edges={["top"]}>  
             <ScrollView contentContainerClassName="gap-4 px-4 pb-8">
-                <View className="flex-row items-center justify-between pt-14">
-                    <Text className="text-2xl font-bold text-primary">Sabor Boliviano</Text>
+                <View className="flex-row items-center justify-between pt-1">
+                    <Text className="text-2xl font-bold text-primary">Sabores de  {department?.name ?? "Bolivia"}</Text>
                     <Pressable
                         onPress={() => navigation.goBack()}
                         className="rounded-full bg-orange-100 p-2"
@@ -72,24 +64,20 @@ const DishHome = () => {
                 </View>
 
                 <DishSearchBar value={search} onChangeText={setSearch} />
-
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-3 py-1">
-                    <Pressable
-                        onPress={() => setSelectedCategory("Todas")}
-                        className={`items-center rounded-full px-4 py-3 ${selectedCategory === "Todas" ? "bg-orange-100" : "bg-slate-100"}`}
-                    >
-                        <Text className="text-sm font-semibold text-slate-700">Todas</Text>
-                    </Pressable>
-                    {/* Aquí puedes agregar más categorías si es necesario */}
-                </ScrollView>
+                <View className="mt-3">
+                    <CategoryFilter
+                        onSelect={(cat) => setSelectedCategory(cat)} 
+                    />
+                </View>
 
                 <View className="gap-4">
                     {filteredDishes.map((dish) => (
                         <DishCard
-                            key={dish.id}
-                            name={dish.name}
-                            restaurant={dish.description}
-                            imageUri={dish.fhoto} // Cambia esto si tienes una URL de imagen
+                            key={dish.dish_id}
+                            name={dish.dish_name}
+                            restaurantName={dish.restaurant_name}
+                            department={dish.department_name}
+                            imageUri={dish.dish_photo} // Cambia esto si tienes una URL de imagen
                             onPress={() => undefined}
                         />
                     ))}

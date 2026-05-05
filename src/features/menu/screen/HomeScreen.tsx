@@ -1,64 +1,57 @@
+import { useCategory } from "@/src/core/context/CategoryContext";
+import { useDepartment } from "@/src/core/context/DepartmentContext";
 import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { MapPin } from "lucide-react-native";
-import {
-    Image,
-    Pressable,
-    ScrollView,
-    Text,
-    View
-} from "react-native";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../../../shared/ui/Button";
 import CategoryFilter from "../../menu/components/CategoryFilter";
 import { GASTRO_ROUTES, TRENDING_DISHES } from "../data/mockData";
 
-// HomeScreen.tsx
 const HomeScreen = () => {
-    const { ciudad } = useLocalSearchParams<{ ciudad: string }>();
     const router = useRouter();
+    const { department } = useDepartment();
+    const { setSelectedCategory } = useCategory();
 
     return (
-        <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
+        <SafeAreaView className="flex-1 bg-white" edges={["top"]}>  
+        <ScrollView
+            className="flex-1"
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 32 }}
+        >
             <View className="flex-1 bg-white">
-                {ciudad && (
-                    <View className=" bg-primary rounded-b-3xl flex-row  items-center gap-2 px-7 py-4">
-                        <MapPin size={20} color="white" />
-                        <Text className="text-black text-lg font-poppins">{ciudad}</Text>
-                    </View>
+                {department && (
+                    <LinearGradient
+                        colors={["#E85D04", "#FB923C"]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                        className="rounded-xl p-6"
+                    >
+                        <View className="flex-row items-center gap-2 mb-2">
+                            <MapPin size={20} color="white" />
+                            <Text className="text-white text-lg font-poppins">{department.name}</Text>
+                        </View>
+                        <Text className="font-regular text-sm text-white/90">
+                            Descubre lo mejor de la gastronomía de {department.name} con nosotros
+                        </Text>
+                    </LinearGradient>
                 )}
-            
-            <ScrollView
-                className="flex-1"
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 32 }}
-            >
 
-
-                {/* Banner */}
-                <LinearGradient
-                    colors={["#E85D04", "#FB923C"]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    className="rounded-xl p-6"
-                >
-                    <Text className="font-poppins text-3xl text-white mb-1">
-                        Sabor Boliviano
-                    </Text>
-                    <Text className="font-regular text-sm text-white/90">
-                        Descubre lo mejor de la gastronomía boliviana con nosotros
-                    </Text>
-                </LinearGradient>
-
-                {/* Category Filter */}
                 <View className="mt-3">
                     <Text className="font-poppins px-4 py-2 text-base text-slate-900">
                         ¿Qué se te antoja hoy?
                     </Text>
-                    <CategoryFilter onSelect={(id) => console.log("filtro:", id)} />
+                    <CategoryFilter
+                        onSelect={(cat) => {
+                            if (!cat) return
+                            setSelectedCategory(cat);
+                            router.push("/tabs/home/dishHome");
+                        }}
+                    />
                 </View>
 
-                {/* Platos en Tendencia */}
                 <View className="mt-6 px-4">
                     <Text className="font-poppins text-base text-slate-900 mb-3">
                         Platos en Tendencia
@@ -88,7 +81,7 @@ const HomeScreen = () => {
                                         variant="secondary"
                                         size="sm"
                                         fullWidth
-                                        onPress={() => router.push("/tabs/home/dishHome")}
+                                    //onPress={() => router.push("/tabs/home/dishHome")}
                                     >
                                         Ver Ruta
                                     </Button>
@@ -112,7 +105,7 @@ const HomeScreen = () => {
                         <Button
                             variant="noborder"
                             size="sm"
-                            onPress={() => router.push("./tabs/routes")}
+                            onPress={() => router.push("/tabs/routes")}
                         >
                             Ver todas
                         </Button>
@@ -135,9 +128,10 @@ const HomeScreen = () => {
                                 style={{ backgroundColor: "rgba(0,0,0,0.45)" }}
                             />
                             {/* Badge */}
-                            <View className="absolute top-3 left-3 bg-primaryLt rounded-full px-3 py-1">
+                            <View className="absolute top-3 left-3 bg-primary rounded-full px-3 py-1">
                                 <Text className="font-medium text-xs text-white">
-                                    {route.badge}
+                                    {/* {route.badge} */}
+                                    POPULAR
                                 </Text>
                             </View>
                             {/* Info */}
@@ -145,20 +139,20 @@ const HomeScreen = () => {
                                 <Text className="font-poppins text-white text-base">
                                     {route.title}
                                 </Text>
-                                <View className="flex-row items-center gap-3 mt-1">
+                                {/* <View className="flex-row items-center gap-3 mt-1">
                                     <Text className="font-regular text-white/80 text-xs">
                                         ⏱ {route.duration}
                                     </Text>
                                     <Text className="font-regular text-white/80 text-xs">
                                         ★ {route.rating} ({route.reviews} reviews)
                                     </Text>
-                                </View>
+                                </View> */}
                             </View>
                         </Pressable>
                     ))}
                 </View>
-            </ScrollView>
             </View>
+        </ScrollView>
         </SafeAreaView>
     );
 };

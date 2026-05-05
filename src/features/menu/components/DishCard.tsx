@@ -2,8 +2,8 @@ import { Image, Pressable, Text, View } from "react-native";
 
 type DishCardProps = {
     name: string;
-    restaurant: string;
-    address?: string;
+    restaurantName: string;
+    department: string;
     distance?: string;
     rating?: string;
     imageUri: string;
@@ -12,8 +12,8 @@ type DishCardProps = {
 
 const DishCard = ({
     name,
-    restaurant,
-    address,
+    restaurantName,
+    department,
     distance,
     rating,
     imageUri,
@@ -30,7 +30,7 @@ const DishCard = ({
                             {name}
                         </Text>
                         <Text className="mt-1 text-sm text-slate-600" numberOfLines={2}>
-                            Restaurante: {restaurant}
+                            Restaurante:{restaurantName}
                         </Text>
                     </View>
 
@@ -38,7 +38,7 @@ const DishCard = ({
                 </View>
 
                 <Text className="text-sm text-slate-500" numberOfLines={1}>
-                    {address}
+                    {department}
                 </Text>
                 <Text className="text-sm text-slate-500">{distance}</Text>
 
